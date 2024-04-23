@@ -1,0 +1,119 @@
+name: CI/CD Pipeline for C/C++ Project
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test_and_mirror:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake make g++ gcc check catch2
+
+      - name: Check for compilation type
+        id: check-type
+        run: |
+          if [ -f "CMakeLists.txt" ]; then
+            echo "PROJECT_TYPE=cmake" >> "$GITHUB_OUTPUT"
+          else
+            echo "PROJECT_TYPE=make" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Start time calculation - Build
+        id: build-time-start
+        run: |
+          echo "START_TIME=`date +%s`" >> "$GITHUB_OUTPUT"
+
+      - name: Run Compilation
+        id: compilation
+        run: |
+          {
+            echo 'COMPILATION_OUTPUT<<EOF'
+            if [ '${{ steps.check-type.outputs.PROJECT_TYPE }}' == 'cmake' ]; then
+              echo "=== Building project using CMake ==="
+              cmake .
+            fi
+            echo "=== Cleaning project ==="
+            make clean
+            echo "=== Building project ==="
+            make
+            echo EOF
+            make clean
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Get time calculation - Build
+        id: build-time
+        run: |
+          end_time=`date +%s`
+          start_time=${{ steps.build-time-start.outputs.START_TIME }}
+          time_diff=$((end_time - start_time))
+          echo "Time Difference: $time_diff seconds"
+          echo "TIME_TAKEN=$time_diff seconds" >> "$GITHUB_OUTPUT"
+
+      - name: Start time calculation - Unit Tests
+        id: unit-tests-time-start
+        run: |
+          echo "START_TIME=`date +%s`" >> "$GITHUB_OUTPUT"
+
+      - name: Run unit tests
+        id: unit-tests
+        run: |
+          {
+            echo 'UNIT_TESTS_OUTPUT<<EOF'
+            echo "=== Running unit tests ==="
+            ./tests/run_unit_tests.sh
+            echo EOF
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Get time calculation - Unit Tests
+        id: unit-tests-time
+        run: |
+          end_time=`date +%s`
+          start_time=${{ steps.unit-tests-time-start.outputs.START_TIME }}
+          time_diff=$((end_time - start_time))
+          echo "Time Difference: $time_diff seconds"
+          echo "TIME_TAKEN=$time_diff seconds" >> "$GITHUB_OUTPUT"
+
+      - name: Mirror project to school repository
+        uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: ${{ secrets.TARGET_REPOSITORY }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Send build report to Discord
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.WEBHOOK_URL }}
+          content: "||@everyone||"
+          username: "Github - ${{ github.actor }}"
+          avatar-url: "https://github.com/${{ github.actor }}.png"
+          embed-title: ":white_check_mark: **Action Successful** :white_check_mark:"
+          embed-author-name: ${{ github.actor }}
+          embed-color: 7844437
+          embed-url: "${{ github.event.head_commit.url }}"
+          embed-author-url: "https://github.com/${{ github.actor }}"
+          embed-author-icon-url: "https://github.com/${{ github.actor }}.png"
+          embed-description: "**${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}**\n[${{ github.event.head_commit.message }}](${{ github.event.head_commit.url }})\nCommit ID: ${{ github.event.head_commit.id }}\nPushed by ${{ github.event.pusher.email }}\nCompilation type: ${{ steps.check-type.outputs.PROJECT_TYPE }}\nCompilation output: ```${{ steps.compilation.outputs.COMPILATION_OUTPUT }}\n```\nCompilation time: `${{ steps.build-time.outputs.TIME_TAKEN }}`\nUnit testing output: ```${{ steps.unit-tests.outputs.UNIT_TESTS_OUTPUT }}\n```\nUnit testing time: `${{ steps.unit-tests-time.outputs.TIME_TAKEN }}`"
+
+      - name: Send error message to Discord on failure
+        if: always() && failure()
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.WEBHOOK_URL }}
+          content: "||@everyone||"
+          username: "Github - ${{ github.actor }}"
+          avatar-url: "https://github.com/${{ github.actor }}.png"
+          embed-title: ":x: **Action failed** :x:"
+          embed-author-name: ${{ github.actor }}
+          embed-color: 16273737
+          embed-url: "${{ github.event.head_commit.url }}"
+          embed-author-url: "https://github.com/${{ github.actor }}"
+          embed-author-icon-url: "https://github.com/${{ github.actor }}.png"
+          embed-description: "**${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}**\n[${{ github.event.head_commit.message }}](${{ github.event.head_commit.url }})\nCommit ID: ${{ github.event.head_commit.id }}\nPushed by ${{ github.event.pusher.email }}\nCompilation type: ${{ steps.check-type.outputs.PROJECT_TYPE }}\nCompilation output: ```${{ steps.compilation.outputs.COMPILATION_OUTPUT }}\n```\nCompilation time: `${{ steps.build-time.outputs.TIME_TAKEN }}`\nUnit testing output: ```${{ steps.unit-tests.outputs.UNIT_TESTS_OUTPUT }}\n```\nUnit testing time: `${{ steps.unit-tests-time.outputs.TIME_TAKEN }}`\nCoding style report: ```${{ steps.coding-style.outputs.CODING_STYLE_REPORT }}\n```"
