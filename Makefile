@@ -19,7 +19,7 @@ ifndef ECHO
     HIT_TOTAL != ${MAKE} ${MAKECMDGOALS} --dry-run ECHO="HIT_MARK" |	\
 		grep -c "HIT_MARK"
     HIT_COUNT = $(eval HIT_N != expr ${HIT_N} + 1)${HIT_N}
-    ECHO = echo "[\033[90m`expr ${HIT_COUNT} '*' 100 / ${HIT_TOTAL}`%\033[0m]"
+    ECHO = echo "[`expr ${HIT_COUNT} '*' 100 / ${HIT_TOTAL}`%]"
 endif
 
 all:	compile
@@ -31,15 +31,15 @@ debug:
 	@make --no-print-directory CFLAGS="$(FLAGS) $(DEBUG_FLAGS)"
 
 %.o:	%.c
-	@$(ECHO) "\033[92mCompiling $@...\033[0m"
+	@$(ECHO) "Compiling $@..."
 	@$(CC) $(CPPFLAGS) -c $(CFLAGS) $< -o $@
 
 $(BIN):	$(OBJ)
-	@$(ECHO) "\033[92mLinking project...\033[0m"
+	@$(ECHO) "Linking project..."
 	@$(CC) $(OBJ) -o $(BIN) $(CFLAGS)
 
 clean:
-	@$(ECHO) "\033[92mCleaning project...\033[0m"
+	@$(ECHO) "Cleaning project..."
 	@rm -f $(OBJ)
 	@find . -name *~ -delete
 	@find . -name *.vgcore -delete
@@ -47,7 +47,7 @@ clean:
 	@find . -name *.swp -delete
 
 fclean:	clean
-	@$(ECHO) "\033[92mPurge of project...\033[0m"
+	@$(ECHO) "Purge of project..."
 	@rm -f $(BIN)
 
 re:	fclean	compile
@@ -55,16 +55,15 @@ re:	fclean	compile
 re-debug:	fclean	debug
 
 cs:	fclean
-	@echo "\033[92mRunning custom coding style script...\033[0m"
+	@echo "Running custom coding style script..."
 	@sudo docker run --rm --security-opt "label:disable" -i -v \
 		.:"/mnt/delivery" -v .:"/mnt/reports" \
 		ghcr.io/epitech/coding-style-checker:latest "/mnt/delivery"	\
 		"/mnt/reports"
-	@echo "You have \033[94m`grep -c ": INFO:" "coding-style-reports.log"`\
-\033[0m infos !"
-	@echo "You have \033[93m`grep -c ": MINOR:" "coding-style-reports.log"`\
-\033[0m minor errors !"
-	@echo "You have \033[91m`grep -c ": MAJOR:" "coding-style-reports.log"`\
-\033[0m major errors !"
+	@echo "You have `grep -c ": INFO:" "coding-style-reports.log"` infos !"
+	@echo "You have `grep -c ": MINOR:" "coding-style-reports.log"` \
+ minor errors !"
+	@echo "You have `grep -c ": MAJOR:" "coding-style-reports.log"`	\
+ major errors !"
 	@cat coding-style-reports.log
 	@rm -f coding-style-reports.log
