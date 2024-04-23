@@ -29,7 +29,7 @@ typedef struct {
     bool _fight_over;
     size_t _thread_id; // Basicly used as a value as much as a mutex
     // Just did not want to rape my RAM with another pthread_t.
-    // Just wait for it to become 
+    // Just wait for it to become
 
     size_t _nb_villagers;
 

@@ -45,7 +45,6 @@ jobs:
             echo "=== Building project ==="
             make
             echo EOF
-            make clean
           } >> "$GITHUB_OUTPUT"
 
       - name: Get time calculation - Build
