@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** C-Project-Template
+** Panoramix
 ** File description:
 ** headers
 */
@@ -8,9 +8,9 @@
 #ifndef INCLUDED_HEADERS_H
     #define INCLUDED_HEADERS_H
 
-    // This file is ONLY made for external includes.
-    // Do NOT add any code in it
-
+    #include <pthread.h>
+    #include <semaphore.h>
+    #include <stdarg.h>
     #include <stdbool.h>
     #include <stdio.h>
     #include <stdlib.h>

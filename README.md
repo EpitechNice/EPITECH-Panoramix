@@ -1,11 +1,11 @@
 <div align='center'>
 
-<img src=IMAGE alt="logo" width=WIDTH height=HEIGHT />
+<img src=./assets/icons/icon.png alt="logo" width=64 height=64 />
 
-<h1>TOPIC</h1>
-<p>PROJECT_DESCRIPTION</p>
+<h1>Panoramix</h1>
+<p> ONE REFILL AT A TIME!</p>
 
-<h4> <span> · </span> <a href="https://github.com/Tech0ne/PROJECT_NAME/doc/"> Documentation </a> <span> · </span> <a href="https://github.com/Tech0ne/PROJECT_NAME/issues"> Report Bug </a> <span> · </span> <a href="https://github.com/Tech0ne/PROJECT_NAME/issues"> Request Feature </a> </h4>
+<h4> <span> · </span> <a href="https://github.com/EpitechNice/EPITECH-Panoramix/"> Documentation </a> <span> · </span> <a href="https://github.com/EpitechNice/EPITECH-Panoramix/issues"> Report Bug </a> <span> · </span> <a href="https://github.com/EpitechNice/EPITECH-Panoramix/issues"> Request Feature </a> </h4>
 
 
 </div>
@@ -22,11 +22,6 @@
 
 ## :star2: About the Project
 
-### :camera: Screenshots
-<div align="center"> <a href=""><img src="SCREENSHOT 1" alt='image' width='800'/></a> </div>
-<div align="center"> <a href=""><img src="SCREENSHOT 2" alt='image' width='800'/></a> </div>
-
-
 ### :space_invader: Tech Stack
 <details> <summary>Client</summary> <ul>
 <li><a href="CLIENT URL">CLIENT NAME</a></li>
@@ -38,58 +33,31 @@
 <li><a href="DB URL">DB NAME</a></li>
 </ul> </details>
 <details> <summary>DevOps</summary> <ul>
-<li><a href="DEVOPS URL">DEVOPS NAME</a></li>
+<li><a href="https://github.com/features/actions">Github Actions</a></li>
 </ul> </details>
 
 ### :dart: Features
-- FEATURE 1
-- FEATURE 2
-
-
-### :key: Environment Variables
-To run this project, you will need to add the following environment variables to your .env file
-
-`ENV 1`
-
-`ENV 2`
-
-
+- Concurent ressource access
+- Mutex and Semaphors usage for thread mitigations
 
 ## :toolbox: Getting Started
 
 ### :bangbang: Prerequisites
 
-- PREREQUISTE 1<a href="PREREQUISTE URL 1"> Here</a>
+- Install Make
 ```bash
-CODE LINE 1
+sudo {package_manager} install make
 ```
-- PREREQUISTE 2<a href="PREREQUISTE URL 2"> Here</a>
+- Install gcc <a href="https://gcc.gnu.org/"> Here</a>
 ```bash
-CODE LINE 2
+sudo {package_manager} install gcc
 ```
-
-
-### :gear: Installation
-
-INSTRUCTION 1
-```bash
-COMMAND 1
-```
-INSTRUCTION 2
-```bash
-COMMAND 2
-```
-
 
 ### :test_tube: Running Tests
 
-INSTRUCTION 1
+Run test script
 ```bash
-COMMAND 1
-```
-INSTRUCTION 2
-```bash
-COMMAND 2
+./tests/run_unit_tests.sh
 ```
 
 
@@ -98,34 +66,22 @@ COMMAND 2
 Clone the project
 
 ```bash
-PROJECT_URL
+https://github.com/EpitechNice/EPITECH-Panoramix
 ```
-INSTRUCTION 1
+Build the project
 ```bash
-COMMAND 1
+make
 ```
-INSTRUCTION 2
+Run the project
 ```bash
-COMMAND 2
+./panoramix -h
 ```
-
-
-### :triangular_flag_on_post: Deployment
-
-INSTRUCTION 1
-```bash
-COMMAND 1
-```
-INSTRUCTION 2
-```bash
-COMMAND 2
-```
-
 
 ## :compass: Roadmap
 
-* [x] ROADMAP 1
-* [ ] ROADMAP 2
+* [x] Create CI/CD pipeline.
+* [x] Setup base of the project.
+* [ ] Make it work 100%
 
 
 ## :wave: Contributing
@@ -136,15 +92,7 @@ Contributions are always welcome!
 
 ### :scroll: Code of Conduct
 
-Please read the [Code of Conduct](PROJECT_URL/CODE_OF_CONDUCT.md)
-
-## :grey_question: FAQ
-
-- QUESTION 1
-- ANSWER 1
-- QUESTION 2
-- ANSWER 2
-
+Please read the [Code of Conduct](https://github.com/EpitechNice/EPITECH-Panoramix/CODE_OF_CONDUCT.md)
 
 ## :warning: License
 
@@ -154,9 +102,4 @@ Distributed under the MIT License. See LICENSE.txt for more information.
 
 Tech0ne - [link](https://tech0ne.github.io) - clement.piasco@epitech.eu
 
-Project Link: [PROJECT_URL](PROJECT_URL)
-
-## :gem: Acknowledgements
-
-- [ACKNOWLEDGEMENT 1](ACKNOWLEDGEMENT_URL 1)
-- [ACKNOWLEDGEMENT 2](ACKNOWLEDGEMENT_URL 2)
+Project Link: [https://github.com/EpitechNice/EPITECH-Panoramix](https://github.com/EpitechNice/EPITECH-Panoramix)

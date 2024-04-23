@@ -1,5 +1,6 @@
-.vscode/
-build/
 *.a
 *.o
-BIN
+build/
+panoramix
+subject.pdf
+.vscode/

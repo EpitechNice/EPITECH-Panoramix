@@ -68,7 +68,9 @@ jobs:
           {
             echo 'UNIT_TESTS_OUTPUT<<EOF'
             echo "=== Running unit tests ==="
-            ./tests/run_unit_tests.sh
+            cd ./tests/
+            ./run_unit_tests.sh
+            cd ./../
             echo EOF
           } >> "$GITHUB_OUTPUT"
 
