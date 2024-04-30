@@ -62,8 +62,8 @@ cs:	fclean
 		"/mnt/reports"
 	@echo "You have `grep -c ": INFO:" "coding-style-reports.log"` infos !"
 	@echo "You have `grep -c ": MINOR:" "coding-style-reports.log"` \
- minor errors !"
-	@echo "You have `grep -c ": MAJOR:" "coding-style-reports.log"`	\
- major errors !"
+minor errors !"
+	@echo "You have `grep -c ": MAJOR:" "coding-style-reports.log"` \
+major errors !"
 	@cat coding-style-reports.log
 	@rm -f coding-style-reports.log
