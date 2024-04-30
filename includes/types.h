@@ -14,22 +14,21 @@
 typedef struct {
     size_t _max_pot_size;
     size_t _nb_refills;
-    size_t _pot_size;
+    int _pot_size;
 } druid_t;
 
 /// @brief Define a villager, meaning if he got potion or not
 typedef struct {
-    bool _got_potion;
+    // bool _got_potion;
     size_t _id;
     size_t _nb_fights_left;
 } villager_t;
 
 typedef struct {
     bool _pot_status; // true: have some refills, false: no more reffils
-    bool _fight_over;
+    // bool _fight_over;
     size_t _thread_id; // Basicly used as a value as much as a mutex
     // Just did not want to rape my RAM with another pthread_t.
-    // Just wait for it to become
 
     size_t _nb_villagers;
 

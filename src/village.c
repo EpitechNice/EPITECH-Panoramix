@@ -14,15 +14,11 @@ void *druid_thread(void *_village)
     printf("Druid: I'm ready... but sleepy...\n");
     while (1) {
         sem_wait(&village->_villager_message);
-        pthread_mutex_lock(&village->_pot);
         village->_druid->_pot_size = village->_druid->_max_pot_size;
         village->_druid->_nb_refills -= 1;
         printf("Druid: Ah! Yes, yes, I'm awake! Working on it! Beware %s%lu%s",
             "I can only make ", village->_druid->_nb_refills,
                 " more refills after this one.\n");
-        if (!village->_druid->_nb_refills)
-            break;
-        pthread_mutex_unlock(&village->_pot);
         sem_post(&village->_druid_message);
         if (!village->_druid->_nb_refills)
             break;
@@ -34,15 +30,19 @@ void *druid_thread(void *_village)
 static void interact_with_mutex(size_t thread_id, village_t *village)
 {
     pthread_mutex_lock(&village->_pot);
-    printf("Villager %lu: I need a drink... I see %lu servings left.\n",
+    if (!village->_pot_status) {
+        pthread_mutex_unlock(&village->_pot);
+        return;
+    }
+    printf("Villager %lu: I need a drink... I see %i servings left.\n",
         thread_id, village->_druid->_pot_size);
-    if (!village->_druid->_pot_size) {
+    if (village->_druid->_pot_size <= 0) {
         printf("Villager %lu: Hey Pano wake up! We need more potion.\n",
             thread_id);
         sem_post(&village->_villager_message);
         sem_wait(&village->_druid_message);
     }
-    village->_druid->_pot_size -= 1;
+    village->_druid->_pot_size--;
     if (!village->_druid->_pot_size && !village->_druid->_nb_refills)
         village->_pot_status = false;
     pthread_mutex_unlock(&village->_pot);
@@ -57,7 +57,7 @@ void *villager_thread(void *_village)
     village->_thread_id = NEGATIVE_NUMBER;
     while (1) {
         if (!village->_villagers[thread_id]->_nb_fights_left ||
-            !(village->_pot_status || village->_druid->_pot_size))
+            !(village->_pot_status))
             break;
         printf("Villager %lu: Going into battle!\n", thread_id);
         interact_with_mutex(thread_id, village);
@@ -94,9 +94,12 @@ static village_t *build_village(size_t nb_villagers, size_t pot_size,
     village_t *village = (village_t *)f_malloc(sizeof(village_t));
 
     village->_nb_villagers = nb_villagers;
+    village->_pot_status = true;
     init_villagers(village, pot_size, nb_refills, nb_fights);
     village->_thread_id = NEGATIVE_NUMBER;
     pthread_mutex_init(&village->_pot, NULL);
+    sem_init(&village->_druid_message, 0, 0);
+    sem_init(&village->_villager_message, 0, 0);
     return village;
 }
 
@@ -115,5 +118,10 @@ int launch_village(size_t *args)
     }
     pthread_mutex_unlock(&village->_pot);
     pthread_join(village->_druid_thread, NULL);
+    for (size_t i = 0; i < village->_nb_villagers; i++)
+        pthread_join(village->_villagers_thread[i], NULL);
+    pthread_mutex_destroy(&village->_pot);
+    sem_destroy(&village->_druid_message);
+    sem_destroy(&village->_villager_message);
     return 0;
 }

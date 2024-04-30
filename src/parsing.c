@@ -26,7 +26,8 @@ size_t get_nbr(const char *data)
 
 int usage(const char *filename, const char *error_message, int err_code)
 {
-    printf("USAGE: %s <nb_villagers> <pot_size> <nb_fights> <nb_refills>\n",
+    fprintf((strlen(error_message) ? stderr : stdout),
+        "USAGE: %s <nb_villagers> <pot_size> <nb_fights> <nb_refills>\n",
         filename);
     if (strlen(error_message))
         fprintf(stderr, "%s\n", error_message);
