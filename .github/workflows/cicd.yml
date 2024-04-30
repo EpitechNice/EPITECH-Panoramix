@@ -82,6 +82,10 @@ jobs:
           echo "Time Difference: $time_diff seconds"
           echo "TIME_TAKEN=$time_diff seconds" >> "$GITHUB_OUTPUT"
 
+      - name: Ignore CI/CD on target deployment
+        run: |
+          echo ".github/" >> .gitignore
+
       - name: Mirror project to school repository
         uses: pixta-dev/repository-mirroring-action@v1
         with:

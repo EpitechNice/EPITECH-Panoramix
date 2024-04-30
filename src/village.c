@@ -55,9 +55,8 @@ void *villager_thread(void *_village)
 
     village->_villagers[thread_id]->_id = thread_id;
     village->_thread_id = NEGATIVE_NUMBER;
-    while (1) {
-        if (!village->_villagers[thread_id]->_nb_fights_left ||
-            !(village->_pot_status))
+    while (village->_villagers[thread_id]->_nb_fights_left) {
+        if (!(village->_pot_status))
             break;
         printf("Villager %lu: Going into battle!\n", thread_id);
         interact_with_mutex(thread_id, village);

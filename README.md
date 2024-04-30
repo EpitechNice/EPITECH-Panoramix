@@ -23,15 +23,7 @@
 ## :star2: About the Project
 
 ### :space_invader: Tech Stack
-<details> <summary>Client</summary> <ul>
-<li><a href="CLIENT URL">CLIENT NAME</a></li>
-</ul> </details>
-<details> <summary>Server</summary> <ul>
-<li><a href="SERVER URL">SERVER NAME</a></li>
-</ul> </details>
-<details> <summary>Database</summary> <ul>
-<li><a href="DB URL">DB NAME</a></li>
-</ul> </details>
+
 <details> <summary>DevOps</summary> <ul>
 <li><a href="https://github.com/features/actions">Github Actions</a></li>
 </ul> </details>
@@ -92,7 +84,7 @@ Contributions are always welcome!
 
 ### :scroll: Code of Conduct
 
-Please read the [Code of Conduct](https://github.com/EpitechNice/EPITECH-Panoramix/CODE_OF_CONDUCT.md)
+Please read the [Code of Conduct](https://github.com/EpitechNice/EPITECH-Panoramix/blob/main/CODE_OF_CONDUCT.md)
 
 ## :warning: License
 

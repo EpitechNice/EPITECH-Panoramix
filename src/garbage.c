@@ -91,7 +91,10 @@ void f_free(void *ptr)
 
 void f_free_ref(void *ptr)
 {
-    f_free(*(void **)ptr);
+    void **real_object = (void **)ptr;
+
+    f_free(real_object);
+    *real_object = NULL;
 }
 
 void __attribute__((destructor)) f_self_cleanup(void)

@@ -2,6 +2,11 @@
 
 echo "=== Started the Unit testing ==="
 
-echo "No tests for this project"
+mkdir -p ./build/
+cd ./build/
+cmake ..
+cmake --build .
+echo "===== Running Tests ====="
+ctest --output-on-failure || exit 1
 
 echo "=== Unit testing ended gracefully ==="
