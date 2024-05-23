@@ -1,0 +1,8 @@
+title: Paniramix
+description: ONE REFILL AT A TIME!
+output: docs
+files:
+  - "*/*.hpp"
+  - "*/*.h"
+  - "**/*.hpp"
+  - "**/*.h"
