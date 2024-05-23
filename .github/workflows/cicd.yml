@@ -11,57 +11,57 @@ on:
 jobs:
   test_and_mirror:
     runs-on: ubuntu-22.04
-      steps:
-        - name: Checkout the code
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-        - name: Build and test the code
-          uses: Tech0ne/Code-Testing-Github-Action@v1
-          id: project_test
+      - name: Build and test the code
+        uses: Tech0ne/Code-Testing-Github-Action@v1
+        id: project_test
 
-        - name: Run coding style checker
-          run: |
-            docker run --rm --security-opt "label:disable" -i -v "$(pwd)":"/mnt/delivery" -v "$(pwd)":"/mnt/reports" ghcr.io/epitech/coding-style-checker:latest "/mnt/delivery" "/mnt/reports"
+      - name: Run coding style checker
+        run: |
+          docker run --rm --security-opt "label:disable" -i -v "$(pwd)":"/mnt/delivery" -v "$(pwd)":"/mnt/reports" ghcr.io/epitech/coding-style-checker:latest "/mnt/delivery" "/mnt/reports"
 
-        - name: Check for coding-style errors
-          uses: Tech0ne/Coding-Style-Github-Action@v1
-          id: coding_style
+      - name: Check for coding-style errors
+        uses: Tech0ne/Coding-Style-Github-Action@v1
+        id: coding_style
 
-        - name: Build documentation
-          uses: Tech0ne/Build-Documentation-Github-Action@v1
-          with:
-            ssh_key:
-              ${{ secrets.SSH_PRIVATE_KEY }}
-            pages_repo:
-              ${{ secrets.DOCUMENTATION_REPO }}
-            subfolder_name:
-              ${{ github.event.repository.name }}
+      - name: Build documentation
+        uses: Tech0ne/Build-Documentation-Github-Action@v1
+        with:
+          ssh_key:
+            ${{ secrets.SSH_PRIVATE_KEY }}
+          pages_repo:
+            ${{ secrets.DOCUMENTATION_REPO }}
+          subfolder_name:
+            ${{ github.event.repository.name }}
 
-        - name: Add .github/ to .gitignore
-          run: |
-            echo ".github/" >> .gitignore
+      - name: Add .github/ to .gitignore
+        run: |
+          echo ".github/" >> .gitignore
 
-        - name: Mirror repository to target repo
-          uses: pixta-dev/repository-mirroring-action@v1
-          with:
-            target_repo_url: ${{ secrets.TARGET_REPOSITORY }}
-            ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Mirror repository to target repo
+        uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: ${{ secrets.TARGET_REPOSITORY }}
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-        - name: Send build report to Discord
-          uses: tsickert/discord-webhook@v5.3.0
-          with:
-            webhook-url: ${{ secrets.WEBHOOK_URL }}
-            username: "Github - ${{ github.actor }}"
-            avatar-url: "https://github.com/${{ github.actor }}.png"
-            embed-title: ":white_check_mark: **Action Successful** :white_check_mark:"
-            embed-author-name: ${{ github.actor }}
-            embed-color: 7844437
-            embed-url: "${{ github.event.head_commit.url }}"
-            embed-author-url: "https://github.com/${{ github.actor }}"
-            embed-author-icon-url: "https://github.com/${{ github.actor }}.png"
-            embed-description: "**${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}**
+      - name: Send build report to Discord
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.WEBHOOK_URL }}
+          username: "Github - ${{ github.actor }}"
+          avatar-url: "https://github.com/${{ github.actor }}.png"
+          embed-title: ":white_check_mark: **Action Successful** :white_check_mark:"
+          embed-author-name: ${{ github.actor }}
+          embed-color: 7844437
+          embed-url: "${{ github.event.head_commit.url }}"
+          embed-author-url: "https://github.com/${{ github.actor }}"
+          embed-author-icon-url: "https://github.com/${{ github.actor }}.png"
+          embed-description: "**${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}**
 
 [${{ github.event.head_commit.message }}](${{ github.event.head_commit.url }})
 
@@ -79,20 +79,20 @@ Coding style
 ${{ steps.coding_style.outputs.check_logs }}
 ```"
 
-        - name: Send error message to Discord on failure
-          if: always() && failure()
-          uses: tsickert/discord-webhook@v5.3.0
-          with:
-            webhook-url: ${{ secrets.WEBHOOK_URL }}
-            username: "Github - ${{ github.actor }}"
-            avatar-url: "https://github.com/${{ github.actor }}.png"
-            embed-title: ":x: **Action failed** :x:"
-            embed-author-name: ${{ github.actor }}
-            embed-color: 16273737
-            embed-url: "${{ github.event.head_commit.url }}"
-            embed-author-url: "https://github.com/${{ github.actor }}"
-            embed-author-icon-url: "https://github.com/${{ github.actor }}.png"
-            embed-description: "**${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}**
+      - name: Send error message to Discord on failure
+        if: always() && failure()
+        uses: tsickert/discord-webhook@v5.3.0
+        with:
+          webhook-url: ${{ secrets.WEBHOOK_URL }}
+          username: "Github - ${{ github.actor }}"
+          avatar-url: "https://github.com/${{ github.actor }}.png"
+          embed-title: ":x: **Action failed** :x:"
+          embed-author-name: ${{ github.actor }}
+          embed-color: 16273737
+          embed-url: "${{ github.event.head_commit.url }}"
+          embed-author-url: "https://github.com/${{ github.actor }}"
+          embed-author-icon-url: "https://github.com/${{ github.actor }}.png"
+          embed-description: "**${{ github.event.repository.owner.name }}/${{ github.event.repository.name }}**
 
 [${{ github.event.head_commit.message }}](${{ github.event.head_commit.url }})
 
