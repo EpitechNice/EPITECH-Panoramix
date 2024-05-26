@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build and test the code
-        uses: Tech0ne/Code-Testing-Github-Action@v1
+        uses: EpitechNice/c-cpp-testing@v1
         id: project_test
 
       - name: Run coding style checker
@@ -26,11 +26,11 @@ jobs:
           docker run --rm --security-opt "label:disable" -i -v "$(pwd)":"/mnt/delivery" -v "$(pwd)":"/mnt/reports" ghcr.io/epitech/coding-style-checker:latest "/mnt/delivery" "/mnt/reports"
 
       - name: Check for coding-style errors
-        uses: Tech0ne/Coding-Style-Github-Action@v1
+        uses: EpitechNice/c-cpp-coding-style@v1
         id: coding_style
 
       - name: Build documentation
-        uses: Tech0ne/Build-Documentation-Github-Action@v1
+        uses: EpitechNice/c-cpp-doc-building@v1
         with:
           ssh_key:
             ${{ secrets.SSH_PRIVATE_KEY }}
